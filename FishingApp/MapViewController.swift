@@ -12,7 +12,6 @@ import Photos
 import Firebase
 import FirebaseStorage
 import FirebaseDatabase
-import FirebaseFirestore
 import Kingfisher
 import ProgressHUD
 
@@ -26,7 +25,7 @@ class CustomPin: NSObject, MKAnnotation {
     var image: UIImage?
     var memo: String?
     var imageUrl: String?
-    
+    var date: Date?
     
     init(coordinate: CLLocationCoordinate2D, title: String, address: String, fishType: String, tackle: String, image: UIImage?, memo: String) {
         self.coordinate = coordinate
@@ -36,6 +35,7 @@ class CustomPin: NSObject, MKAnnotation {
         self.tackle = tackle
         self.image = image
         self.memo = memo
+        
     }
 }
 
@@ -60,6 +60,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
     var fishTypeLabel: UILabel!
     var tackleLabel: UILabel!
     var memoLabel: UILabel!
+    var date: Date?
     var pinImageView: UIImageView!
     
     private var locationManager: CLLocationManager!
@@ -89,6 +90,8 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
             
         }
         setupWeatherTextView()
+        
+        setupOverlayView()
     }
     func setupOverlayView() {
         overlayView = UIView(frame: CGRect(x: 0, y: self.view.frame.height, width: self.view.frame.width, height: 300))
@@ -111,6 +114,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
         
         self.view.addSubview(overlayView)
     }
+    
     func setupWeatherTextView() {
            view.addSubview(weatherTextView)
            
@@ -184,7 +188,6 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
     }
     
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
-        // 現在地のアノテーションはカスタマイズしない
         
         
         
@@ -213,40 +216,44 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
 
              return annotationView
     }
- func savePinToFirebaseDatabase(customPin: CustomPin) {
-     let timeLineDB = Database.database().reference().child("timeLine").childByAutoId()
-     
-     if let imageData = customPin.image?.jpegData(compressionQuality: 0.8) {
-         let storageRef = Storage.storage().reference().child("pin_images/\(UUID().uuidString).jpg")
-         storageRef.putData(imageData, metadata: nil) { (metadata, error) in
-             guard metadata != nil else {
-                 print("Error uploading image: \(error!)")
-                 return
-             }
-             
-             storageRef.downloadURL { (url, error) in
-                 guard let downloadURL = url else {
-                     print("Error getting download URL: \(error!)")
-                     return
-                 }
-                 
-                 let pinInfo = [
-                     "latitude": customPin.coordinate.latitude,
-                     "longitude": customPin.coordinate.longitude,
-                     "title": customPin.title ?? "",
-                     "address": customPin.address ?? "",
-                     "fishType": customPin.fishType ?? "",
-                     "tackle": customPin.tackle ?? "",
-                     "memo": customPin.memo ?? "",
-                     "imageUrl": downloadURL.absoluteString
-                 ] as [String : Any]
-                 
-                 timeLineDB.setValue(pinInfo)
-             }
-         }
-     }
- }
+    // ...
 
+    // ...
+
+    func savePinToFirebaseDatabase(customPin: CustomPin) {
+        let timeLineDB = Database.database().reference().child("timeLine").childByAutoId()
+        
+        if let imageData = customPin.image?.jpegData(compressionQuality: 0.8) {
+            let storageRef = Storage.storage().reference().child("pin_images/\(UUID().uuidString).jpg")
+            storageRef.putData(imageData, metadata: nil) { (metadata, error) in
+                guard metadata != nil else {
+                    print("Error uploading image: \(error!)")
+                    return
+                }
+                
+                storageRef.downloadURL { (url, error) in
+                    guard let downloadURL = url else {
+                        print("Error getting download URL: \(error!)")
+                        return
+                    }
+                    
+                    let pinInfo = [
+                        "latitude": customPin.coordinate.latitude,
+                        "longitude": customPin.coordinate.longitude,
+                        "title": customPin.title ?? "",
+                        "address": customPin.address ?? "",
+                        "fishType": customPin.fishType ?? "",
+                        "tackle": customPin.tackle ?? "",
+                        "memo": customPin.memo ?? "",
+                        "imageUrl": downloadURL.absoluteString,
+                        "date": Date().timeIntervalSince1970 // ここで現在の日付を保存
+                    ] as [String : Any]
+                    
+                    timeLineDB.setValue(pinInfo)
+                }
+            }
+        }
+    }
 
     func loadPinsFromFirebaseDatabase(completion: @escaping ([CustomPin]) -> Void) {
         let timeLineDB = Database.database().reference().child("timeLine")
@@ -266,9 +273,14 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
                     let tackle = pinData["tackle"] as? String ?? ""
                     let memo = pinData["memo"] as? String ?? ""
                     let imageUrlString = pinData["imageUrl"] as? String ?? ""
+                    
+                    // ここで日付を読み込む
+                    let dateTimestamp = pinData["date"] as? Double ?? 0.0
+                    let date = Date(timeIntervalSince1970: dateTimestamp)
 
                     let pin = CustomPin(coordinate: CLLocationCoordinate2D(latitude: latitude, longitude: longitude), title: title, address: address, fishType: fishType, tackle: tackle, image: nil, memo: memo)
                     pin.imageUrl = imageUrlString
+                    pin.date = date  // 日付をCustomPinオブジェクトにセット
                     pins.append(pin)
                 }
             }
@@ -276,6 +288,10 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
             completion(pins)
         }
     }
+
+    // ...
+
+
 
     func fetchWeatherData(for coordinate: CLLocationCoordinate2D) {
         let urlString = "https://api.openweathermap.org/data/2.5/weather?lat=\(coordinate.latitude)&lon=\(coordinate.longitude)&appid=\(apiKey)&units=metric"

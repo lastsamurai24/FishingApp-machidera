@@ -12,6 +12,7 @@
 		3C57B2732AB3E0F200A094F5 /* MypageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C57B2722AB3E0F200A094F5 /* MypageViewController.swift */; };
 		3C57B2752AB420F100A094F5 /* WeatherViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C57B2742AB420F100A094F5 /* WeatherViewController.swift */; };
 		3C57B2972AB5A15B00A094F5 /* PinDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C57B2962AB5A15B00A094F5 /* PinDetailViewController.swift */; };
+		3C57B29B2AB6943B00A094F5 /* messageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C57B29A2AB6943B00A094F5 /* messageViewController.swift */; };
 		3CA28D432AB2AD400054FA71 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CA28D422AB2AD400054FA71 /* AppDelegate.swift */; };
 		3CA28D452AB2AD400054FA71 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CA28D442AB2AD400054FA71 /* SceneDelegate.swift */; };
 		3CA28D472AB2AD400054FA71 /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CA28D462AB2AD400054FA71 /* MapViewController.swift */; };
@@ -34,6 +35,7 @@
 		3C57B2722AB3E0F200A094F5 /* MypageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MypageViewController.swift; sourceTree = "<group>"; };
 		3C57B2742AB420F100A094F5 /* WeatherViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherViewController.swift; sourceTree = "<group>"; };
 		3C57B2962AB5A15B00A094F5 /* PinDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PinDetailViewController.swift; sourceTree = "<group>"; };
+		3C57B29A2AB6943B00A094F5 /* messageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = messageViewController.swift; sourceTree = "<group>"; };
 		3CA28D3F2AB2AD400054FA71 /* FishingApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FishingApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3CA28D422AB2AD400054FA71 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		3CA28D442AB2AD400054FA71 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -91,6 +93,7 @@
 				3CA28D462AB2AD400054FA71 /* MapViewController.swift */,
 				3CA28D692AB2DA2B0054FA71 /* LoginViewController.swift */,
 				3CA28D482AB2AD400054FA71 /* Main.storyboard */,
+				3C57B29A2AB6943B00A094F5 /* messageViewController.swift */,
 				3C57B2962AB5A15B00A094F5 /* PinDetailViewController.swift */,
 				3C57B2742AB420F100A094F5 /* WeatherViewController.swift */,
 				3C57B2722AB3E0F200A094F5 /* MypageViewController.swift */,
@@ -193,6 +196,7 @@
 			files = (
 				3C57B2732AB3E0F200A094F5 /* MypageViewController.swift in Sources */,
 				3C57B2972AB5A15B00A094F5 /* PinDetailViewController.swift in Sources */,
+				3C57B29B2AB6943B00A094F5 /* messageViewController.swift in Sources */,
 				3CA28D6A2AB2DA2B0054FA71 /* LoginViewController.swift in Sources */,
 				3CA28D472AB2AD400054FA71 /* MapViewController.swift in Sources */,
 				3CA28D432AB2AD400054FA71 /* AppDelegate.swift in Sources */,
